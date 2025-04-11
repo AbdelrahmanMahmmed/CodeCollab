@@ -1,0 +1,39 @@
+{
+  "name": "codecollab",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node src/api/server.js",
+    "dev": "nodemon src/api/server.js",
+    "docs": "node src/swagger.js"
+  },
+  "keywords": [
+    "codecollab",
+    "collaboration",
+    "real-time",
+    "web",
+    "application"
+  ],
+  "author": "Abdelrahman Mahmmed",
+  "license": "ISC",
+  "description": "CodeCollab is a real-time web application that allows users to collaborate on code in real-time. It provides a platform for developers to work together, share ideas, and improve their coding skills.",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "canvas": "^3.1.0",
+    "cloudinary": "^2.6.0",
+    "crypto": "^1.0.1",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "express-async-handler": "^1.2.0",
+    "express-validator": "^7.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.2",
+    "multer": "^1.4.5-lts.2",
+    "nodemailer": "^6.10.0",
+    "nodemon": "^3.1.9",
+    "socket.io": "^4.8.1",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
