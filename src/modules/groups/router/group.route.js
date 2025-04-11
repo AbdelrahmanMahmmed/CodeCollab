@@ -18,7 +18,8 @@ const {
     uploadImageForGroup,
     getPublicGroups,
     getMyGroups,
-    removeMember
+    removeMember,
+    promoteToAdmin
 } = require('../controller/group.controller');
 
 router.post('/',
@@ -66,5 +67,10 @@ router.post('/:groupId/upload-image',
 router.post('/:groupId/members/:userId',
     ProtectedRoters,
     removeMember);
+
+router.put('/:groupId/promote/:userId', 
+    ProtectedRoters, 
+    promoteToAdmin);
+
 
 module.exports = router;
