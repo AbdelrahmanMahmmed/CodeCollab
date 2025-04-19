@@ -17,6 +17,7 @@ const authRoutes = require("../modules/auth/router/auth.route");
 const userRoutes = require("../modules/user/router/user.route");
 const groupRoutes = require("../modules/groups/router/group.route");
 const messageRoutes = require("../modules/massages/router/massage.route");
+const callRoutes = require("../modules/calls/router/call.route");
 
 // App Initialization
 const app = express();
@@ -39,6 +40,7 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/group', groupRoutes);
 app.use('/api/v1/group', messageRoutes);
+app.use('/api/v1/call', callRoutes);
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 

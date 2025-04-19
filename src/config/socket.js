@@ -66,7 +66,6 @@ module.exports = {
              * @event   newMessage
              * @access  Private
              */
-
             socket.on('newMessage', (message) => {
                 io.to(message.groupId).emit('newMessage', message);
 
@@ -77,6 +76,44 @@ module.exports = {
                 }
             });
 
+            socket.on('webrtc-offer', ({ groupId, offer, senderId }) => {
+                socket.to(groupId).emit('webrtc-offer', { offer, senderId });
+            });
+
+            socket.on('webrtc-answer', ({ groupId, answer, senderId }) => {
+                socket.to(groupId).emit('webrtc-answer', { answer, senderId });
+            });
+
+            socket.on('webrtc-candidate', ({ groupId, candidate, senderId }) => {
+                socket.to(groupId).emit('webrtc-candidate', { candidate, senderId });
+            });
+
+            /**
+             * @desc    Notify group members that a call has started
+             * @param   {object} callData - Contains groupId, callId, startedBy, startedAt
+             * @event   callStarted
+             * @access  Private
+             */
+            socket.on('callStarted', ({ groupId, callId, startedBy, startedAt }) => {
+                io.to(groupId).emit('callStarted', {
+                    groupId,
+                    callId,
+                    startedBy,
+                    startedAt
+                });
+                console.log(`Call started in group ${groupId} by ${startedBy}`);
+            });
+
+            /**
+             * @desc    Notify group members that a call has ended
+             * @param   {object} callData - Contains groupId, callId, endedBy, endedAt
+             * @event   callEnded
+             * @access  Private
+             */
+            socket.on('callEnded', ({ message, groupId }) => {
+                console.log(message);
+            });
+            
         });
         return io;
     },
