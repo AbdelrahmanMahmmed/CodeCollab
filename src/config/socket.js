@@ -59,8 +59,25 @@ module.exports = {
             socket.on('disconnect', () => {
                 console.log('Client disconnected:', socket.id);
             });
-        });
 
+            /**
+             * @desc    Send a message to a group
+             * @param   {object} message - The message object containing sender, type, content, and timestamp
+             * @event   newMessage
+             * @access  Private
+             */
+
+            socket.on('newMessage', (message) => {
+                io.to(message.groupId).emit('newMessage', message);
+
+                if (message.type === 'voice') {
+                    console.log(`Voice message received in group ${message.groupId} from ${message.sender}`);
+                } else {
+                    console.log(`Message received in group ${message.groupId} from ${message.sender}`);
+                }
+            });
+
+        });
         return io;
     },
 

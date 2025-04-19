@@ -119,14 +119,18 @@ exports.updateGroup = asyncHandler(async (req, res, next) => {
 });
 
 /**
- * @desc    Invite a user to join a private group (admin sends invitation)
+ * @desc    Invite multiple users to join a private group (admin sends invitations)
  * @route   POST /api/v1/group/:groupId/invite
  * @access  Private
  */
 exports.inviteMember = asyncHandler(async (req, res, next) => {
     const { id } = req.user;
     const { groupId } = req.params;
-    const { inviteUserId } = req.body;
+    const { inviteUserIds } = req.body; // Now expecting an array of user IDs
+
+    if (!Array.isArray(inviteUserIds)) {
+        return next(new ApiError('inviteUserIds must be an array', 400));
+    }
 
     const group = await Group.findById(groupId);
     if (!group) {
@@ -141,32 +145,52 @@ exports.inviteMember = asyncHandler(async (req, res, next) => {
         return next(new ApiError(`You are not authorized to send invites to this group`, 403));
     }
 
-    const userToInvite = await User.findById(inviteUserId);
-    if (!userToInvite) {
-        return next(new ApiError(`No user found with this id ${inviteUserId}`, 404));
+    const successfulInvites = [];
+    const failedInvites = [];
+
+    for (const userId of inviteUserIds) {
+        try {
+            const userToInvite = await User.findById(userId);
+            if (!userToInvite) {
+                failedInvites.push({ userId, reason: 'User not found' });
+                continue;
+            }
+
+            if (group.members.includes(userId)) {
+                failedInvites.push({ userId, reason: 'Already a member' });
+                continue;
+            }
+
+            if (group.joinRequests.includes(userId)) {
+                failedInvites.push({ userId, reason: 'Already invited' });
+                continue;
+            }
+
+            if (!userToInvite.requestsGroup) {
+                userToInvite.requestsGroup = [];
+            }
+
+            group.joinRequests.push(userId);
+            userToInvite.requestsGroup.push(groupId);
+            await userToInvite.save();
+            successfulInvites.push(userId);
+        } catch (error) {
+            failedInvites.push({ userId, reason: 'Internal error' });
+        }
     }
 
-    if (group.members.includes(inviteUserId)) {
-        return next(new ApiError(`User is already a member of the group`, 400));
+    if (successfulInvites.length > 0) {
+        await group.save();
     }
-
-    if (group.joinRequests.includes(inviteUserId)) {
-        return next(new ApiError(`User has already been invited`, 400));
-    }
-
-    if (!userToInvite.requestsGroup) {
-        userToInvite.requestsGroup = [];
-    }
-
-    group.joinRequests.push(inviteUserId);
-    userToInvite.requestsGroup.push(groupId);
-
-    await group.save();
-    await userToInvite.save();
 
     res.status(200).json({
         status: 'success',
-        message: `Invitation sent to user with id ${inviteUserId}`,
+        data: {
+            successfulInvites,
+            failedInvites,
+            totalSuccess: successfulInvites.length,
+            totalFailed: failedInvites.length
+        }
     });
 });
 

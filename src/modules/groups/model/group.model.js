@@ -68,7 +68,7 @@ const groupSchema = new mongoose.Schema({
         },
         type: {
             type: String,
-            enum: ['text', 'image'],
+            enum: ['text', 'image' , 'voice'],
             required: true
         },
         content: {

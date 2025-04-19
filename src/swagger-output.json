@@ -508,7 +508,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "inviteUserId": {
+                "inviteUserIds": {
                   "example": "any"
                 }
               }
@@ -787,6 +787,29 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/group/{groupId}/voice": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
           }
         }
       }

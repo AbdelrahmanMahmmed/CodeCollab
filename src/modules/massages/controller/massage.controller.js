@@ -37,7 +37,7 @@ exports.sendMessage = asyncHandler(async (req, res, next) => {
 
     const newMessage = {
         sender: userId,
-        type,
+        type : 'text',
         content: encryptedContent,
         timestamp: Date.now()
     };
@@ -125,4 +125,47 @@ exports.deleteMessage = asyncHandler(async (req, res, next) => {
     io.to(groupId).emit('messageDeleted', { messageId });
 
     res.status(200).json({ message: "Message deleted successfully" });
+});
+
+/**
+ * @desc    Send a voice message to a group
+ * @route   POST /api/v1/group/:groupId/voice
+ * @access  Private
+ */
+exports.sendVoiceMessage = asyncHandler(async (req, res, next) => {
+    const { groupId } = req.params;
+    const senderId = req.user._id;
+
+    const group = await Group.findById(groupId);
+    if (!group) return next(new ApiError("Group not found", 404));
+
+    if (!req.file) return next(new ApiError("No voice file provided", 400));
+
+    const result = await cloudinary.uploader.upload_stream(
+        {
+            resource_type: 'auto',
+            folder: 'group_voice_messages'
+        },
+        async (error, result) => {
+            if (error) return next(new ApiError("Failed to upload voice", 500));
+
+            const voiceMessage = {
+                sender: senderId,
+                type: 'voice',
+                content: result.secure_url,
+                timestamp: Date.now()
+            };
+
+            group.messages.push(voiceMessage);
+            await group.save();
+
+            const io = getIO();
+            io.to(groupId).emit('newMessage', voiceMessage);
+
+            res.status(201).json({ message: "Voice message sent", data: voiceMessage });
+        }
+    );
+
+    const streamifier = require('streamifier');
+    streamifier.createReadStream(req.file.buffer).pipe(result);
 });
