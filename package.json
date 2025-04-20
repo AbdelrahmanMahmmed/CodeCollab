@@ -18,6 +18,7 @@
   "license": "ISC",
   "description": "CodeCollab is a real-time web application that allows users to collaborate on code in real-time. It provides a platform for developers to work together, share ideas, and improve their coding skills.",
   "dependencies": {
+    "axios": "^1.8.4",
     "bcryptjs": "^3.0.2",
     "canvas": "^3.1.0",
     "cloudinary": "^2.6.0",
