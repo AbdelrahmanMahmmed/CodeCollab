@@ -11,110 +11,14 @@ module.exports = {
 
         io.on('connection', (socket) => {
             console.log('Client connected:', socket.id);
+            
+            require('../sockets/handlers')(socket, io);
 
-            /**
-             * @desc    Join a group
-             * @param   {string} groupId - The ID of the group to join
-             * @event   joinGroup
-             * @access  Private
-             */
-            socket.on('joinGroup', (groupId) => {
-                socket.join(groupId);
-                console.log(`Socket ${socket.id} joined group ${groupId}`);
-            });
-
-            /**
-             * @desc    Send a message to a group
-             * @param   {string} groupId - The ID of the group to send the message to
-             * @param   {object} message - The message object containing sender, type, content, and timestamp
-             * @event   newMessage
-             * @access  Private
-             */
-            socket.on('messageDeleted', ({ groupId, messageId }) => {
-                io.to(groupId).emit('messageDeleted', { messageId });
-                console.log(`Message with ID ${messageId} deleted in group ${groupId}`);
-            });
-
-            /**
-             * @desc    Notify the user when they have been promoted to admin
-             * @param   {object} promotionData - Data related to the promotion
-             * @event   newAdminPromotion
-             * @access  Private
-             */
-            socket.on('newAdminPromotion', ({ groupId, userId, adminName }) => {
-                io.to(groupId).emit('newAdminPromotion', {
-                    message: `Congratulations! You have been promoted to Admin by ${adminName}.`,
-                    userId: userId,
-                    groupId: groupId
-                });
-                console.log(`User ${userId} has been promoted to Admin in group ${groupId} by ${adminName}`);
-            });
-
-            /**
-             * @desc    Disconnect from the server
-             * @event   disconnect
-             * @access  Private
-             * @description This event is triggered when the client disconnects from the server.
-             */
             socket.on('disconnect', () => {
                 console.log('Client disconnected:', socket.id);
             });
-
-            /**
-             * @desc    Send a message to a group
-             * @param   {object} message - The message object containing sender, type, content, and timestamp
-             * @event   newMessage
-             * @access  Private
-             */
-            socket.on('newMessage', (message) => {
-                io.to(message.groupId).emit('newMessage', message);
-
-                if (message.type === 'voice') {
-                    console.log(`Voice message received in group ${message.groupId} from ${message.sender}`);
-                } else {
-                    console.log(`Message received in group ${message.groupId} from ${message.sender}`);
-                }
-            });
-
-            socket.on('webrtc-offer', ({ groupId, offer, senderId }) => {
-                socket.to(groupId).emit('webrtc-offer', { offer, senderId });
-            });
-
-            socket.on('webrtc-answer', ({ groupId, answer, senderId }) => {
-                socket.to(groupId).emit('webrtc-answer', { answer, senderId });
-            });
-
-            socket.on('webrtc-candidate', ({ groupId, candidate, senderId }) => {
-                socket.to(groupId).emit('webrtc-candidate', { candidate, senderId });
-            });
-
-            /**
-             * @desc    Notify group members that a call has started
-             * @param   {object} callData - Contains groupId, callId, startedBy, startedAt
-             * @event   callStarted
-             * @access  Private
-             */
-            socket.on('callStarted', ({ groupId, callId, startedBy, startedAt }) => {
-                io.to(groupId).emit('callStarted', {
-                    groupId,
-                    callId,
-                    startedBy,
-                    startedAt
-                });
-                console.log(`Call started in group ${groupId} by ${startedBy}`);
-            });
-
-            /**
-             * @desc    Notify group members that a call has ended
-             * @param   {object} callData - Contains groupId, callId, endedBy, endedAt
-             * @event   callEnded
-             * @access  Private
-             */
-            socket.on('callEnded', ({ message, groupId }) => {
-                console.log(message);
-            });
-            
         });
+
         return io;
     },
 
