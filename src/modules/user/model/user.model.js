@@ -60,20 +60,11 @@ const User = new mongoose.Schema({
         ref: 'Group',
         default: null
     }],
-    // editorSessions : {
-    //     type: [String],
-    //     default: [],
-    // },
-    // friends : {
-    //     type: [mongoose.Schema.Types.ObjectId],
-    //     ref: 'User',
-    //     default: [],
-    // },
-    // notifications: {
-    //     type: [mongoose.Schema.Types.ObjectId],
-    //     ref: 'Notification',
-    //     default: [],
-    // },
+    friends : {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'User',
+        default: [],
+    },
     statusMessage :{
         type: String,
         default: null,
