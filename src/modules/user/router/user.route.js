@@ -13,7 +13,8 @@ const {
     editName,
     editStatus,
     Blocked,
-    UnBlocked
+    UnBlocked,
+    getUserByHandle
 } = require('../controller/user.controller');
 
 
@@ -39,4 +40,7 @@ router.put('/unblock',
     ProtectedRoters,
     UnBlocked);
 
+router.get('/@:handle',
+    getUserByHandle);
+    
 module.exports = router;

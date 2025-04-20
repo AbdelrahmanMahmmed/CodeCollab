@@ -9,6 +9,10 @@ const User = new mongoose.Schema({
         minlength: 2,
         maxlength: 50,
     },
+    handle : {
+        type: String,
+        unique: true,
+    },
     email: {
         type: String,
         required: true,

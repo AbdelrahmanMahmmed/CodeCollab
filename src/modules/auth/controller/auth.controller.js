@@ -16,8 +16,13 @@ exports.Register = asyncHandler(async (req, res) => {
 
     const generateUrlavatar = await generateProfileImage(req.body.name);
 
+    const generatedNumber = Math.floor(100 + Math.random() * 900);
+
+    const handle = '@' + req.body.name.toLowerCase().replace(/\s+/g, '') + generatedNumber;
+
     const user = new User({
         name: req.body.name,
+        handle,
         email: req.body.email,
         password: req.body.password,
         avatar : generateUrlavatar,

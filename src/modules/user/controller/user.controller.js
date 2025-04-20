@@ -1,9 +1,5 @@
 const User = require('../model/user.model');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler')
-const crypto = require('crypto');
-const SendEmail = require('../../../util/sendEmail');
 const ApiError = require('../../../util/APIError');
 
 /**
@@ -101,4 +97,18 @@ exports.UnBlocked = asyncHandler(async (req, res) => {
     res.status(200).json({
         message: 'User is UnBlocked successfully',
     });
+});
+
+/**
+ * @desc    Get user by handle
+ * @route   GET /:handle
+ * @access  Public
+ */
+exports.getUserByHandle = asyncHandler(async (req, res) => {
+    const handleParam = '@' + req.params.handle;
+    const user = await User.findOne({ handle: handleParam }).select('-_id name avatar handle statusMessage');
+    if (!user) {
+        return res.status(404).json({ message: 'Handle is Wrong' });
+    }
+    res.status(200).json({ user });
 });
