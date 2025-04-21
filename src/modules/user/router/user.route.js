@@ -6,41 +6,19 @@ const {
     nameValidator,
 } = require('../validator/user.validator');
 
-const { ProtectedRoters, allwedTo } = require('../../auth/controller/auth.controller');
-
-const {
-    profile,
-    editName,
-    editStatus,
-    Blocked,
-    UnBlocked,
-    getUserByHandle
-} = require('../controller/user.controller');
+const { middlewareFunctions } = require('../../auth/controller/auth.controller');
+const userController = require('../controller/user.controller');
 
 
-router.get('/profile', 
-    ProtectedRoters,
-    profile);
+router.get('/@:handle', userController.getUserByHandle);
 
-router.put('/edit/status', 
-    ProtectedRoters,
-    statusValidator,
-    editStatus);
+router.use(middlewareFunctions.ProtectedRoters);
 
-router.put('/edit/name', 
-    ProtectedRoters,
-    nameValidator,
-    editName);
+// Protected User Routes
+router.get('/profile', userController.getprofile);
+router.put('/edit/status', statusValidator, userController.editStatus);
+router.put('/edit/name', nameValidator, userController.editName);
+router.put('/block',userController.bolckUser);
+router.put('/unblock',userController.unblockUser);
 
-router.put('/block', 
-    ProtectedRoters,
-    Blocked);
-
-router.put('/unblock', 
-    ProtectedRoters,
-    UnBlocked);
-
-router.get('/@:handle',
-    getUserByHandle);
-    
 module.exports = router;

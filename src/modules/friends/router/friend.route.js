@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 
-const { ProtectedRoters } = require('../../auth/controller/auth.controller');
+const { middlewareFunctions } = require('../../auth/controller/auth.controller');
 
 const {
     sendFriendRequest,
@@ -16,32 +16,34 @@ const {
     getBlockedUsers,
 } = require('../controller/friend.controller');
 
+router.use(middlewareFunctions.ProtectedRoters);
+
 
 router.route('/requests/@:handle/send')
-    .post(ProtectedRoters, sendFriendRequest);
+    .post(sendFriendRequest);
 
 router.route('/requests/@:handle/accept')
-    .post(ProtectedRoters, acceptFriendRequest);
+    .post(acceptFriendRequest);
 
 router.route('/requests/@:handle/reject')
-    .post(ProtectedRoters, rejectFriendRequest);
+    .post(rejectFriendRequest);
 
 router.route('/requests/@:handle/unfriend')
-    .post(ProtectedRoters, unfriendUser);
+    .post(unfriendUser);
 
 router.route('/requests/@:handle/block')
-    .post(ProtectedRoters, blockUser);
+    .post(blockUser);
 
 router.route('/requests/@:handle/unblock')
-    .post(ProtectedRoters, unblockUser);
+    .post(unblockUser);
 
 router.route('/')
-    .get(ProtectedRoters, getFriends);
+    .get(getFriends);
 
 router.route('/requests')
-    .get(ProtectedRoters, getFriendRequests);
+    .get(getFriendRequests);
 
 router.route('/blocked')
-    .get(ProtectedRoters, getBlockedUsers);
+    .get(getBlockedUsers);
 
 module.exports = router;

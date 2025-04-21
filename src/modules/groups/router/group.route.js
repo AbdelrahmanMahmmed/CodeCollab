@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { upload } = require('../../../util/UploadImage');
 
-const { ProtectedRoters, allwedTo } = require('../../auth/controller/auth.controller');
+const { middlewareFunctions } = require('../../auth/controller/auth.controller');
 
 const {
     createGroup,
@@ -22,55 +22,35 @@ const {
     promoteToAdmin
 } = require('../controller/group.controller');
 
-router.post('/',
-    ProtectedRoters,
-    createGroup);
+router.use(middlewareFunctions.ProtectedRoters);
 
-router.get('/public',
-    ProtectedRoters,
-    getPublicGroups);
 
-router.get('/my',
-    ProtectedRoters,
-    getMyGroups);
+router.post('/',createGroup);
+
+router.get('/public',getPublicGroups);
+
+router.get('/my',getMyGroups);
 
 router.route('/:groupId')
-    .get(ProtectedRoters, getGroup)
-    .put(ProtectedRoters, updateGroup)
-    .delete(ProtectedRoters, deleteGroup);
+    .get( getGroup)
+    .put( updateGroup)
+    .delete( deleteGroup);
 
-router.post('/:groupId/invite',
-    ProtectedRoters,
-    inviteMember);
+router.post('/:groupId/invite',inviteMember);
 
-router.post('/:groupId/accept-invitation',
-    ProtectedRoters,
-    acceptInvitation);
+router.post('/:groupId/accept-invitation',acceptInvitation);
 
-router.post('/:groupId/reject-invitation',
-    ProtectedRoters,
-    rejectInvitation);
+router.post('/:groupId/reject-invitation',rejectInvitation);
 
-router.post('/:groupId/leave',
-    ProtectedRoters,
-    leaveGroup);
+router.post('/:groupId/leave',leaveGroup);
 
-router.get('/:groupId/members',
-    ProtectedRoters,
-    listGroupMembers);
+router.get('/:groupId/members',listGroupMembers);
 
-router.post('/:groupId/upload-image',
-    ProtectedRoters,
-    upload.single('image'),
-    uploadImageForGroup);
+router.post('/:groupId/upload-image', upload.single('image'),uploadImageForGroup);
 
-router.post('/:groupId/members/:userId',
-    ProtectedRoters,
-    removeMember);
+router.post('/:groupId/members/:userId',removeMember);
 
-router.put('/:groupId/promote/:userId', 
-    ProtectedRoters, 
-    promoteToAdmin);
+router.put('/:groupId/promote/:userId',promoteToAdmin);
 
 
 module.exports = router;

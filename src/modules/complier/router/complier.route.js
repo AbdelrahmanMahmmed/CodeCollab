@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 
-const { ProtectedRoters } = require('../../auth/controller/auth.controller');
+const { middlewareFunctions } = require('../../auth/controller/auth.controller');
 
 const {
     getGroupCode,
@@ -10,15 +10,18 @@ const {
     runCode
 } = require('../controller/complier.controller');
 
+router.use(middlewareFunctions.ProtectedRoters);
+
+
 router
     .route('/:groupId/code')
-        .get(ProtectedRoters, getGroupCode)
-        .post(ProtectedRoters, saveGroupCode);
+        .get(getGroupCode)
+        .post(saveGroupCode);
 
 
 router
     .route('/:groupId/run')
-        .post(ProtectedRoters, runCode);
+        .post(runCode);
 
 
 module.exports = router;

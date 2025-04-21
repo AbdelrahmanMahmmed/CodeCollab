@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { ProtectedRoters } = require('../../auth/controller/auth.controller');
+const { middlewareFunctions } = require('../../auth/controller/auth.controller');
 
 const upload = require('../../../util/uploadVoice');
 
@@ -12,13 +12,15 @@ const {
     sendVoiceMessage
 } = require('../controller/massage.controller');
 
+router.use(middlewareFunctions.ProtectedRoters);
 
-router.get('/:groupId/messages', ProtectedRoters, getGroupMessages);
 
-router.post('/:groupId/message', ProtectedRoters, sendMessage);
+router.get('/:groupId/messages', getGroupMessages);
 
-router.delete('/:groupId/message/:messageId', ProtectedRoters, deleteMessage);
+router.post('/:groupId/message',  sendMessage);
 
-router.post('/:groupId/voice', ProtectedRoters ,  upload.single('voice')  , sendVoiceMessage);
+router.delete('/:groupId/message/:messageId',  deleteMessage);
+
+router.post('/:groupId/voice',  upload.single('voice')  , sendVoiceMessage);
 
 module.exports = router;

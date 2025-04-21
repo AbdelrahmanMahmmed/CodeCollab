@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 
-const { ProtectedRoters } = require('../../auth/controller/auth.controller');
+const { middlewareFunctions } = require('../../auth/controller/auth.controller');
 
 const {
     startCall,
@@ -14,26 +14,28 @@ const {
     getCalls
 } = require('../controller/call.controller');
 
+router.use(middlewareFunctions.ProtectedRoters);
+
 
 router.route('/:groupId/start')
-    .post(ProtectedRoters, startCall);
+    .post(startCall);
 
 router.route('/:groupId/end')
-    .post(ProtectedRoters, endCall);
+    .post(endCall);
 
 router.route('/:groupId/join')
-    .post(ProtectedRoters, joinCall);
+    .post(joinCall);
 
 router.route('/:groupId/leave')
-    .post(ProtectedRoters, leaveCall);
+    .post(leaveCall);
 
 router.route('/:groupId/duration')
-    .get(ProtectedRoters, getCallDuration);
+    .get(getCallDuration);
 
 router.route('/:groupId/members')
-    .get(ProtectedRoters, getMembers);
+    .get(getMembers);
 
 router.route('/:groupId/calls')
-    .get(ProtectedRoters, getCalls);
+    .get(getCalls);
 
 module.exports = router;

@@ -8,34 +8,33 @@ const {
 } = require('../validator/auth.validator');
 
 
-const {
-    Register,
-    Login,
-    VerifyUser,
-    verifyCode,
-    checkVerification,
-    ForgetPassword,
-    verifycode,
-    Resetpassword
-} = require('../../auth/controller/auth.controller');
+const authController = require('../../auth/controller/auth.controller');
 
 
-router.post('/register', RegisterUserValidator, Register);
-router.post('/login', checkVerification, LoginUserValidator, Login);
+router.post('/register', RegisterUserValidator, authController.register);
+router.post('/login', 
+    authController.middlewareFunctions.checkVerification, 
+    LoginUserValidator, 
+    authController.login
+);
 
 
-router.post('/verify/user', VerifyUserValidator, VerifyUser);
-router.post('/verify/code', verifyCode);
+router.post('/verify/user', VerifyUserValidator, authController.verifyUser.Verifyuser);
+router.post('/verify/code', authController.verifyUser.Verifyuser);
 
 
 router
     .route('/forget-password')
-    .post(checkVerification, ForgetPassword);
+    .post(    
+        authController.middlewareFunctions.checkVerification, 
+        authController.forgotpassword.ForgetPassword
+    );
+
 router
     .route('/verify/password-reset-code')
-    .post(verifycode);
+    .post(authController.forgotpassword.verifycode);
 router
     .route('/reset-password')
-    .post(Resetpassword);
+    .post(authController.forgotpassword.Resetpassword);
 
 module.exports = router;
