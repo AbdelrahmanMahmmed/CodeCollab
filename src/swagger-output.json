@@ -328,6 +328,27 @@
         }
       }
     },
+    "/api/v1/user/{@handle}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "@handle",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/v1/group/": {
       "post": {
         "description": "",
@@ -1055,9 +1076,6 @@
             "schema": {
               "type": "object",
               "properties": {
-                "source_code": {
-                  "example": "any"
-                },
                 "language_id": {
                   "example": "any"
                 },
@@ -1066,6 +1084,195 @@
                 }
               }
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/friend/requests/{@handle}/send": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "@handle",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/v1/friend/requests/{@handle}/accept": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "@handle",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/friend/requests/{@handle}/reject": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "@handle",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/friend/requests/{@handle}/unfriend": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "@handle",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/friend/requests/{@handle}/block": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "@handle",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/friend/requests/{@handle}/unblock": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "@handle",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/friend/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/friend/requests": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/friend/blocked": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
