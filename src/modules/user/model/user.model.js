@@ -69,6 +69,12 @@ const User = new mongoose.Schema({
         ref: 'User',
         default: [],
     },
+    friendRequests:{ 
+            type: [mongoose.Schema.Types.ObjectId], 
+            ref: 'User',
+            default: []
+    },
+    blockedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     statusMessage :{
         type: String,
         default: null,
