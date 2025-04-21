@@ -5,52 +5,37 @@ const { upload } = require('../../../util/UploadImage');
 
 const { middlewareFunctions } = require('../../auth/controller/auth.controller');
 
-const {
-    createGroup,
-    getGroup,
-    updateGroup,
-    deleteGroup,
-    inviteMember,
-    acceptInvitation,
-    rejectInvitation,
-    leaveGroup,
-    listGroupMembers,
-    uploadImageForGroup,
-    getPublicGroups,
-    getMyGroups,
-    removeMember,
-    promoteToAdmin
-} = require('../controller/group.controller');
+const groupController = require('../controller/group.controller');
 
 router.use(middlewareFunctions.ProtectedRoters);
 
 
-router.post('/',createGroup);
+router.post('/',groupController.createGroup);
 
-router.get('/public',getPublicGroups);
+router.get('/public',groupController.getPublicGroups);
 
-router.get('/my',getMyGroups);
+router.get('/my',groupController.getMyGroups);
 
 router.route('/:groupId')
-    .get( getGroup)
-    .put( updateGroup)
-    .delete( deleteGroup);
+    .get( groupController.getGroup)
+    .put( groupController.updateGroup)
+    .delete( groupController.deleteGroup);
 
-router.post('/:groupId/invite',inviteMember);
+router.post('/:groupId/invite',groupController.inviteMember);
 
-router.post('/:groupId/accept-invitation',acceptInvitation);
+router.post('/:groupId/accept-invitation',groupController.acceptInvitation);
 
-router.post('/:groupId/reject-invitation',rejectInvitation);
+router.post('/:groupId/reject-invitation',groupController.rejectInvitation);
 
-router.post('/:groupId/leave',leaveGroup);
+router.post('/:groupId/leave',groupController.leaveGroup);
 
-router.get('/:groupId/members',listGroupMembers);
+router.get('/:groupId/members',groupController.listGroupMembers);
 
-router.post('/:groupId/upload-image', upload.single('image'),uploadImageForGroup);
+router.post('/:groupId/upload-image', upload.single('image'),groupController.uploadImageForGroup);
 
-router.post('/:groupId/members/:userId',removeMember);
+router.post('/:groupId/members/:userId',groupController.removeMember);
 
-router.put('/:groupId/promote/:userId',promoteToAdmin);
+router.put('/:groupId/promote/:userId',groupController.promoteToAdmin);
 
 
 module.exports = router;

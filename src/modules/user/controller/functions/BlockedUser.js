@@ -1,5 +1,4 @@
-const User = require('../../../user/model/user.model');
-const asyncHandler = require('express-async-handler')
+const {  User,asyncHandler,ApiError} = require('../user.dependencies');
 
 /**
  * @desc    Block user
