@@ -5,8 +5,11 @@ const blockFriend = require('./functions/blockUser');
 const unblockFriend = require('./functions/unblockUser');
 const getFriends = require('./functions/getFriends');
 const unfriend = require('./functions/unfriendUser');
-const sendMessageToFriend = require('./func messages/sendMessageToFriend')
-const getMeassages = require('./func messages/getMessages')
+const sendMessageToFriend = require('./func messages/sendMessageToFriend');
+const getMeassages = require('./func messages/getMessages');
+const deleteMeassage = require('./func messages/deleteMeassage');
+const updateMeassage = require('./func messages/updateMeassage');
+const SendImage = require('./func messages/SendImagetoFriend');
 module.exports = {
     sendrequest,
     acceptrequest,
@@ -16,5 +19,8 @@ module.exports = {
     getFriends,
     unfriend,
     sendMessageToFriend,
-    getMeassages
+    getMeassages,
+    deleteMeassage,
+    updateMeassage,
+    SendImage
 }

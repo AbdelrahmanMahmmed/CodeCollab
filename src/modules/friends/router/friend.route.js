@@ -3,6 +3,7 @@ const router = express.Router();
 
 
 const { middlewareFunctions } = require('../../auth/controller/auth.controller');
+const { upload } = require('../../../util/UploadImage');
 
 const friendController = require('../controller/friend.controller');
 
@@ -37,10 +38,16 @@ router.route('/blocked')
     .get(friendController.getFriends.getBlockedUsers);
 
 router.route('/message/@:handle')
-    .post(friendController.sendMessageToFriend);
+    .post(friendController.sendMessageToFriend)
+
+router.route('/message/:messageId/@:handle')
+    .put(friendController.updateMeassage)
+    .delete(friendController.deleteMeassage);
 
 router.route('/messages/@:handle')
     .get(friendController.getMeassages);
 
+router.route('/messages/@:handle/send-image')
+    .post( upload.single('image'),friendController.SendImage);
 
 module.exports = router;
