@@ -1,5 +1,5 @@
 const {Group,asyncHandler,ApiError,getIO,CryptoJS} = require('../massages.dependencies')
-
+const encryptedContented = require('../../../../util/encrypted');
 /**
  * @desc    Send a message to a group
  * @route   POST /api/v1/group/:groupId/message
@@ -7,7 +7,7 @@ const {Group,asyncHandler,ApiError,getIO,CryptoJS} = require('../massages.depend
  */
 const sendMessage = asyncHandler(async (req, res, next) => {
     const { groupId } = req.params;
-    const { type, content } = req.body;
+    const { type = 'text', content } = req.body;
     const userId = req.user._id;
 
     const group = await Group.findById(groupId);
@@ -16,24 +16,11 @@ const sendMessage = asyncHandler(async (req, res, next) => {
     const isMember = group.members.includes(userId);
     if (!isMember) return next(new ApiError("You are not a member of this group", 403));
 
-    if (type !== 'text' && type !== 'image') {
-        return next(new ApiError("Invalid message type", 400));
-    }
-
-    let encryptedContent;
-    if (type === 'text') {
-        try {
-            encryptedContent = CryptoJS.AES.encrypt(content, process.env.SECRET_KEY).toString();
-        } catch (err) {
-            return next(new ApiError("Encryption failed", 500));
-        }
-    } else {
-        encryptedContent = content;
-    }
+    const encryptedContent = encryptedContented(content, type);
 
     const newMessage = {
         sender: userId,
-        type : 'text',
+        type,
         content: encryptedContent,
         timestamp: Date.now()
     };

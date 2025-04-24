@@ -7,7 +7,13 @@ const friendSchema = new mongoose.Schema({
         type: String,
         enum: ['Pending', 'Accepted', 'Rejected'],
         default: 'Pending'
-    }
+    },
+    massages: [{
+        sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        message: String,
+        messageType: { type: String, enum: ['text', 'image'], default: 'text' },
+        createdAt: { type: Date, default: Date.now }
+    }]    
 }, { timestamps: true });
 
 module.exports = mongoose.model('friend', friendSchema);

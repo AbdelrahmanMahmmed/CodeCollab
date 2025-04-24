@@ -4,46 +4,43 @@ const router = express.Router();
 
 const { middlewareFunctions } = require('../../auth/controller/auth.controller');
 
-const {
-    sendFriendRequest,
-    acceptFriendRequest,
-    rejectFriendRequest,
-    unfriendUser,
-    blockUser,
-    unblockUser,
-    getFriendRequests,
-    getFriends,
-    getBlockedUsers,
-} = require('../controller/friend.controller');
+const friendController = require('../controller/friend.controller');
 
 router.use(middlewareFunctions.ProtectedRoters);
 
 
 router.route('/requests/@:handle/send')
-    .post(sendFriendRequest);
+    .post(friendController.sendrequest);
 
 router.route('/requests/@:handle/accept')
-    .post(acceptFriendRequest);
+    .post(friendController.acceptrequest);
 
 router.route('/requests/@:handle/reject')
-    .post(rejectFriendRequest);
+    .post(friendController.rejectrequest);
 
 router.route('/requests/@:handle/unfriend')
-    .post(unfriendUser);
+    .post(friendController.unfriend);
 
 router.route('/requests/@:handle/block')
-    .post(blockUser);
+    .post(friendController.blockFriend);
 
 router.route('/requests/@:handle/unblock')
-    .post(unblockUser);
+    .post(friendController.unblockFriend);
 
 router.route('/')
-    .get(getFriends);
+    .get(friendController.getFriends.getFriends);
 
 router.route('/requests')
-    .get(getFriendRequests);
+    .get(friendController.getFriends.getFriendRequests);
 
 router.route('/blocked')
-    .get(getBlockedUsers);
+    .get(friendController.getFriends.getBlockedUsers);
+
+router.route('/message/@:handle')
+    .post(friendController.sendMessageToFriend);
+
+router.route('/messages/@:handle')
+    .get(friendController.getMeassages);
+
 
 module.exports = router;
