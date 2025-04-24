@@ -4,30 +4,31 @@ const router = express.Router();
 
 const { middlewareFunctions } = require('../../auth/controller/auth.controller');
 
+const CallVaild = require('../validator/call.validator');
 const callController = require('../controller/call.controller');
+
 
 router.use(middlewareFunctions.ProtectedRoters);
 
-
 router.route('/:groupId/start')
-    .post(callController.startCall);
+    .post(CallVaild.StartCallVaild,callController.startCall);
 
 router.route('/:groupId/end')
-    .post(callController.endCall);
+    .post(CallVaild.EndCallVaild,callController.endCall);
 
 router.route('/:groupId/join')
-    .post(callController.joinCall);
+    .post(CallVaild.JoinCallVaild,callController.joinCall);
 
 router.route('/:groupId/leave')
-    .post(callController.leaveCall);
+    .post(CallVaild.LeaveCallVaild,callController.leaveCall);
 
 router.route('/:groupId/duration')
-    .get(callController.getCallDuration);
+    .get(CallVaild.GetVaild,callController.getCallDuration);
 
 router.route('/:groupId/members')
-    .get(callController.getMembers);
+    .get(CallVaild.GetVaild,callController.getMembers);
 
 router.route('/:groupId/calls')
-    .get(callController.getCalls);
+    .get(CallVaild.GetVaild,callController.getCalls);
 
 module.exports = router;

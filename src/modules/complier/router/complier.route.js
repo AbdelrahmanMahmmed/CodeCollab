@@ -4,24 +4,21 @@ const router = express.Router();
 
 const { middlewareFunctions } = require('../../auth/controller/auth.controller');
 
-const {
-    getGroupCode,
-    saveGroupCode,
-    runCode
-} = require('../controller/complier.controller');
+const ComplierVaildation = require('../../complier/validator/complier.validator');
+const compilerController = require('../controller/complier.controller');
 
 router.use(middlewareFunctions.ProtectedRoters);
 
 
 router
     .route('/:groupId/code')
-        .get(getGroupCode)
-        .post(saveGroupCode);
+        .get(ComplierVaildation.getCodeVaild,compilerController.getGroupCode)
+        .post(ComplierVaildation.saveGroupCodeVaild,compilerController.saveGroupCode);
 
 
 router
     .route('/:groupId/run')
-        .post(runCode);
+        .post(ComplierVaildation.RunCodeVaild,compilerController.runCode);
 
 
 module.exports = router;

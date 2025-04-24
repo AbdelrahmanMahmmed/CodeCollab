@@ -10,12 +10,7 @@ const SECRET = process.env.CODE_SECRET;
 const runCode = asyncHandler(async (req, res, next) => {
     const { language_id, stdin } = req.body;
     const { groupId } = req.params;
-
-    console.log(`Request received for group: ${groupId}`);
-
     const compiler = await Compiler.findOne({ group: groupId });
-    console.log("Compiler found:", compiler);
-
     if (!compiler) return next(new ApiError('Compiler code not found for this group', 404));
 
     const code = compiler.getCode(process.env.CODE_SECRET);
