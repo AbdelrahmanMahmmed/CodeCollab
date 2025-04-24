@@ -473,6 +473,24 @@
         }
       }
     },
+    "/api/v1/group/{groupId}/image": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/v1/call/{groupId}/start": {
       "post": {
         "description": "",

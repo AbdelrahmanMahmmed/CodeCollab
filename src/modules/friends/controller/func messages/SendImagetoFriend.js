@@ -1,4 +1,4 @@
-const { ApiError, Friend, User, asyncHandler } = require('../friends.dependencies');
+const { ApiError, Friend, User, asyncHandler ,getIO} = require('../friends.dependencies');
 const { uploadImage } = require('../../../../util/UploadImage');
 const encryptedContented = require('../../../../util/encrypted');
 
@@ -42,6 +42,14 @@ const sendImageMessage = asyncHandler(async (req, res, next) => {
 
     friendship.massages.push(newMessage);
     await friendship.save();
+
+    const io = getIO();
+    io.to(receiver._id.toString()).emit("friend-new-image-message", {
+        from: { id: userId, name: req.user.name, avatar: req.user.avatar },
+        to: receiver._id,
+        imageUrl,
+        createdAt: new Date()
+    });
 
     res.status(201).json({ message: "Image sent successfully" });
 });

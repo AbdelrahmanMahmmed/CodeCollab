@@ -31,4 +31,4 @@ const uploadImage = (file) => {
     });
 };
 
-module.exports = { upload, uploadImage }
+module.exports = { upload , uploadImage }
