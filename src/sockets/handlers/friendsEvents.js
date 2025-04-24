@@ -66,3 +66,61 @@ exports.emitUnblocked = (unblockedId, userInfo) => {
         });
     }
 };
+
+// Send private message
+exports.emitPrivateMessage = (receiverId, senderInfo, messageContent) => {
+    const socketId = activeUsers.getSocketId(receiverId);
+    if (socketId) {
+        getIO().to(socketId).emit('private_message', {
+            from: senderInfo,
+            message: messageContent,
+            type: 'text',
+            timestamp: new Date()
+        });
+    }
+};
+
+// Send image message to a friend
+exports.emitImageMessage = (receiverId, senderInfo, imageUrl) => {
+    const socketId = activeUsers.getSocketId(receiverId);
+    if (socketId) {
+        getIO().to(socketId).emit('image_message', {
+            from: senderInfo,
+            imageUrl: imageUrl,
+            type: 'image',
+            timestamp: new Date()
+        });
+    }
+};
+
+// Send message to a group
+exports.emitGroupMessage = (groupId, senderInfo, messageContent) => {
+    const socketIds = activeUsers.getSocketIdsByGroup(groupId);
+    if (socketIds.length > 0) {
+        socketIds.forEach(socketId => {
+            getIO().to(socketId).emit('group_message', {
+                from: senderInfo,
+                message: messageContent,
+                type: 'text',
+                groupId: groupId,
+                timestamp: new Date()
+            });
+        });
+    }
+};
+
+// Send image message to a group
+exports.emitGroupImageMessage = (groupId, senderInfo, imageUrl) => {
+    const socketIds = activeUsers.getSocketIdsByGroup(groupId);
+    if (socketIds.length > 0) {
+        socketIds.forEach(socketId => {
+            getIO().to(socketId).emit('group_image_message', {
+                from: senderInfo,
+                imageUrl: imageUrl,
+                type: 'image',
+                groupId: groupId,
+                timestamp: new Date()
+            });
+        });
+    }
+};
