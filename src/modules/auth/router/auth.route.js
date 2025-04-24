@@ -1,27 +1,19 @@
 const express = require('express');
 const router = express.Router();
 
-const {
-    RegisterUserValidator,
-    LoginUserValidator,
-    VerifyUserValidator
-} = require('../validator/auth.validator');
-
+const AuthValidator= require('../validator/auth.validator');
 
 const authController = require('../../auth/controller/auth.controller');
 
-
-router.post('/register', RegisterUserValidator, authController.register);
+router.post('/register', AuthValidator.RegisterUserValidator, authController.register);
 router.post('/login', 
     authController.middlewareFunctions.checkVerification, 
-    LoginUserValidator, 
+    AuthValidator.LoginUserValidator, 
     authController.login
 );
 
-
-router.post('/verify/user', VerifyUserValidator, authController.verifyUser.Verifyuser);
+router.post('/verify/user', AuthValidator.VerifyUserValidator, authController.verifyUser.Verifyuser);
 router.post('/verify/code', authController.verifyUser.Verifyuser);
-
 
 router
     .route('/forget-password')
