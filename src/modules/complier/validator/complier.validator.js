@@ -1,8 +1,12 @@
-const saveGroupCodeVaild = require('./handlers/saveGroupCodeVaild');
-const RunCodeVaild = require('./handlers/runCodeVaid');
-const getCodeVaild = require('./handlers/getCodeVaild');
+const createFileValidator = require('./handlers/createFileValidator');
+const RunCodeVaild = require('./handlers/runCodeValidator');
+const updateFileValidator = require('./handlers/updateFileValidator');
+const deleteFileValidator = require('./handlers/deleteFileValidator');
+const getFileValidator = require('./handlers/getFileValidator');
 module.exports = {
-    saveGroupCodeVaild,
+    createFileValidator,
     RunCodeVaild,
-    getCodeVaild
+    updateFileValidator,
+    deleteFileValidator,
+    getFileValidator
 };

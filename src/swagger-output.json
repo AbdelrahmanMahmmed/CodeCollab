@@ -617,7 +617,25 @@
         }
       }
     },
-    "/api/v1/complier/{groupId}/code": {
+    "/api/v1/complier/{groupId}/run": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/complier/{groupId}/files": {
       "get": {
         "description": "",
         "parameters": [
@@ -651,12 +669,46 @@
         }
       }
     },
-    "/api/v1/complier/{groupId}/run": {
-      "post": {
+    "/api/v1/complier/file/{fileId}": {
+      "get": {
         "description": "",
         "parameters": [
           {
-            "name": "groupId",
+            "name": "fileId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/complier/file/{fileId}/updated-code": {
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "fileId",
             "in": "path",
             "required": true,
             "type": "string"

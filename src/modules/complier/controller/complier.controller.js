@@ -1,9 +1,14 @@
+const getGroupRootFiles = require('./functions/getGroupRootFiles');
+const createNewFile = require('./functions/createNewFile');
+const getFileDetails = require('./functions/getFileDetails');
+const updateFile = require('./functions/updateFile');
+const deleteFile = require('./functions/deleteFile');
 const runCode = require('./functions/runCode');
-const saveGroupCode = require('./functions/saveGroupCode');
-const getGroupCode = require('./functions/getGroupCode');
-
 module.exports = {
-    runCode,
-    saveGroupCode,
-    getGroupCode
+    getGroupRootFiles,
+    createNewFile,
+    getFileDetails,
+    updateFile,
+    deleteFile,
+    runCode
 }
