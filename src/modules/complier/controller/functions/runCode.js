@@ -7,20 +7,16 @@ const SECRET = process.env.CODE_SECRET;
  * @access  Private
  */
 const runCode = asyncHandler(async (req, res, next) => {
-    const { stdin, fileId } = req.body;
+    const { stdin } = req.body;
     const { groupId } = req.params;
 
     const compiler = await Compiler.findOne({ group: groupId });
+    
     if (!compiler) {
         return next(new ApiError('Compiler code not found for this group', 404));
     }
 
-    const file = compiler.files.id(fileId);
-    if (!file) {
-        return next(new ApiError('File not found', 404));
-    }
-
-    const code = file.getCode(SECRET);
+    const code = compiler.getCode(SECRET);
 
     try {
         const response = await axios.post('https://judge0-ce.p.rapidapi.com/submissions', {

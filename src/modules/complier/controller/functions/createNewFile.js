@@ -1,4 +1,6 @@
 const { Compiler, Group, asyncHandler, ApiError } = require('../complier.dependencies');
+const Version = require('../../../versionsCode/model/version.model')
+const generateIdCommit = require('../../../../util/generateIdCommit');
 
 /**
  * @desc    Create a new file inside a group
@@ -7,7 +9,7 @@ const { Compiler, Group, asyncHandler, ApiError } = require('../complier.depende
  */
 const createNewFile = asyncHandler(async (req, res, next) => {
     const groupId = req.params.groupId;
-    const { fileName , language_id } = req.body;
+    const { fileName, language_id } = req.body;
 
     const group = await Group.findById(groupId);
     if (!group) return next(new ApiError('Group not found', 404));
@@ -19,11 +21,26 @@ const createNewFile = asyncHandler(async (req, res, next) => {
         fileName,
         group: groupId,
         language_id,
-        createdBy : req.user._id,
+        createdBy: req.user._id,
+    });
+
+    const generateIdcommit = generateIdCommit();
+
+    const version = new Version({
+        file: newFile._id,
+        versions: [
+            {
+                IdCommit: generateIdcommit,
+                code: '',
+                createdAt: new Date(),
+                createdBy: req.user._id,
+            }
+        ]
     });
 
     await newFile.save();
-
+    await version.save();
+    
     res.status(201).json({
         status: 'success',
         message: 'New file created successfully',

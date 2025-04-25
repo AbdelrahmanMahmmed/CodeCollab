@@ -9,7 +9,7 @@ dotenv.config();
 const swaggerFile = require('../swagger-output.json');
 const { dbConnect,init,authRoutes,userRoutes,
         groupRoutes,messageRoutes,callRoutes,
-        complierRoutes,friendRoutes,} = require('./import/moudles');
+        complierRoutes,friendRoutes,versionRoutes} = require('./import/moudles');
 
 // App Initialization
 const app = express();
@@ -37,6 +37,7 @@ app.use('/api/v1/group', groupRoutes);
 app.use('/api/v1/group', messageRoutes);
 app.use('/api/v1/call', callRoutes);
 app.use('/api/v1/complier', complierRoutes);
+app.use('/api/v1/complier', versionRoutes);
 app.use('/api/v1/friend', friendRoutes);
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
