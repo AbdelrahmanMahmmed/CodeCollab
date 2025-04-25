@@ -26,6 +26,9 @@ const app = express();
 const server = http.createServer(app);
 const io = init(server);
 
+// Security Middleware
+// require('../security/index')(app);
+
 // Connect to MongoDB
 dbConnect();
 
