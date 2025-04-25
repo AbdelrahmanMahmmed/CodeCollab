@@ -1,25 +1,15 @@
 // External Modules
-const express = require('express');
-const dotenv = require('dotenv');
-const swaggerUi = require('swagger-ui-express');
-const ApiError = require('../util/APIError');
-const globalError = require('../middleware/errormiddleware');
-const http = require('http');
+const { express, dotenv, swaggerUi, ApiError, globalError, http, } = require('./import/libararys');
+
 
 // Load environment variables
 dotenv.config();
 
 // Internal Modules
 const swaggerFile = require('../swagger-output.json');
-const dbConnect = require('../config/dbConnection');
-const { init } = require('../config/socket'); 
-const authRoutes = require("../modules/auth/router/auth.route");
-const userRoutes = require("../modules/user/router/user.route");
-const groupRoutes = require("../modules/groups/router/group.route");
-const messageRoutes = require("../modules/massages/router/massage.route");
-const callRoutes = require("../modules/calls/router/call.route");
-const complierRoutes = require("../modules/complier/router/complier.route");
-const friendRoutes = require("../modules/friends/router/friend.route");
+const { dbConnect,init,authRoutes,userRoutes,
+        groupRoutes,messageRoutes,callRoutes,
+        complierRoutes,friendRoutes,} = require('./import/moudles');
 
 // App Initialization
 const app = express();
