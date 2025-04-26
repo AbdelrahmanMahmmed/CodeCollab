@@ -1,4 +1,3 @@
-const swaggerFile = require('../../swagger-output.json');
 const dbConnect = require('../../config/dbConnection');
 const { init } = require('../../config/socket'); 
 const authRoutes = require("../../modules/auth/router/auth.route");
@@ -11,7 +10,6 @@ const friendRoutes = require("../../modules/friends/router/friend.route");
 const versionRoutes = require("../../modules/versionsCode/router/version.route");
 
 module.exports = {
-    swaggerFile,
     dbConnect,
     init,
     authRoutes,
