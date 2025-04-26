@@ -18,7 +18,7 @@ const editName = asyncHandler(async (req, res) => {
         return res.status(403).json({ message: 'You are blocked' });
     } else {
         res.status(200).json({
-            data: user
+            massage : "Name updated successfully"
         });
     }
 });

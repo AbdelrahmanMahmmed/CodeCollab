@@ -2,7 +2,7 @@ const { body } = require('express-validator');
 const validatorsMiddleware = require('../../../../middleware/validatormiddleware');
 
 const statusValidator = [
-    body('statusMessage')
+    body('status')
         .notEmpty()
         .withMessage('Status is required')
         .isLength({ min: 3 })

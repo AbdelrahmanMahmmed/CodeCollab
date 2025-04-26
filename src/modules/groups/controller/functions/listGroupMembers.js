@@ -17,11 +17,13 @@ const listGroupMembers = asyncHandler(async (req, res, next) => {
         return next(new ApiError(`No group found with this id ${groupId}`, 404));
     }
 
-    const isAdmin = group.admin.toString() === id;
+    const userId = req.user._id.toString();
+    const isMember = group.members.some(member => member._id.toString() === userId);
+    const isAdmin = group.admin._id.toString() === userId;
 
-    // if (!isAdmin && !group.members.some(member => member._id.toString() === id)) {
-    //     return next(new ApiError(`You are not authorized to view this group members`, 403));
-    // }
+    if (group.isPrivate && !isMember && !isAdmin) {
+        return next(new ApiError(`You are not allowed to access this private group`, 403));
+    }
 
     const membersWithRole = [
         {

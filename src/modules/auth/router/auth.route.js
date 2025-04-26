@@ -13,7 +13,7 @@ router.post('/login',
 );
 
 router.post('/verify/user', AuthValidator.VerifyUserValidator, authController.verifyUser.Verifyuser);
-router.post('/verify/code', authController.verifyUser.Verifyuser);
+router.post('/verify/code', authController.verifyUser.verifyCode);
 
 router
     .route('/forget-password')
