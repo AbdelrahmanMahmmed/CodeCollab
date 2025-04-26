@@ -7,6 +7,11 @@ const { asyncHandler, Group, Call, ApiError, getIO } = require('../call.dependen
  */
 const getCalls = asyncHandler(async (req, res, next) => {
     const { groupId } = req.params;
+    
+    const group = await Group.findById(groupId);
+    if (!group) {
+        return next(new ApiError('No group found with that id', 404));
+    }
 
     const calls = await Call.find({ group: groupId, isActive: false })
         .sort({ createdAt: -1 })

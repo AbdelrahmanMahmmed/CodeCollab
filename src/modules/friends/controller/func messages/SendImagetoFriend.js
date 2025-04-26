@@ -1,6 +1,7 @@
 const { ApiError, Friend, User, asyncHandler ,getIO} = require('../friends.dependencies');
 const { uploadImage } = require('../../../../util/UploadImage');
-const encryptedContented = require('../../../../util/encrypted');
+const encryptedContented = require('../../../../util/en-de-text.js/encrypted');
+const SECRET = process.env.SECRET_KEY;
 
 /**
  * @desc    Send a message with image to a friend
@@ -31,7 +32,7 @@ const sendImageMessage = asyncHandler(async (req, res, next) => {
     const result = await uploadImage(req.file);
     imageUrl = result.secure_url;
 
-    const encryptedContent = encryptedContented(imageUrl, 'image');
+    const encryptedContent = encryptedContented(imageUrl, SECRET);
 
     const newMessage = {
         sender: userId,

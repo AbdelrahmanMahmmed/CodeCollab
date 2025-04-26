@@ -1,5 +1,6 @@
-const decryptMessages = require('../../../../util/decrypted');
+const decrypted = require('../../../../util/en-de-text.js/decrypted');
 const { ApiError, Friend, User, asyncHandler } = require('../friends.dependencies');
+const SECRET = process.env.SECRET_KEY;
 
 /**
  * @desc    Get messages from a friend by handle
@@ -23,7 +24,30 @@ const getMessages = asyncHandler(async (req, res, next) => {
 
     if (!friendship) return next(new ApiError("You are not friends with this user", 403));
 
-    const decryptedMessages = decryptMessages(friendship.massages, process.env.SECRET_KEY);
+    const decryptedMessages = friendship.massages.map(msg => {
+        try {
+            const decryptedContent = decrypted(msg.message, SECRET);
+            return {
+                sender: {
+                    name: msg.sender.name,
+                    image: msg.sender.avatar || null,
+                },
+                content: decryptedContent,
+                messageType: msg.messageType,
+                createdAt: msg.createdAt,
+            };
+        } catch (error) {
+            return {
+                sender: {
+                    name: msg.sender.name,
+                    image: msg.sender.avatar || null,
+                },
+                content: msg.message,
+                messageType: msg.messageType,
+                createdAt: msg.createdAt,
+            };
+        }
+    });
 
     res.status(200).json({ messages: decryptedMessages });
 });

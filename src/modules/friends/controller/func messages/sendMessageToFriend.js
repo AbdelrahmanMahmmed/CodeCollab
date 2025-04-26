@@ -1,5 +1,6 @@
 const { ApiError, User, Friend, getIO, activeUsers, asyncHandler } = require('../friends.dependencies');
-const encryptedContented = require('../../../../util/encrypted');
+const encryptedContented = require('../../../../util/en-de-text.js/encrypted');
+const SECRET = process.env.SECRET_KEY;
 
 const sendMessageToFriend = asyncHandler(async (req, res, next) => {
     const senderId = req.user.id;
@@ -28,7 +29,8 @@ const sendMessageToFriend = asyncHandler(async (req, res, next) => {
 
     const createdAt = new Date();
 
-    const encryptedContent = encryptedContented(message, messageType);
+    const encryptedContent = encryptedContented(message, SECRET);
+    console.log("Encrypting with SECRET:", SECRET);
 
     friendship.massages.push({
         sender: senderId,
