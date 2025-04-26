@@ -26,4 +26,8 @@ router
     .route('/file/:fileId/updated-code')
     .patch(ComplierVaildation.updateFileValidator, compilerController.updateFile)
 
+router
+    .route('/file/:fileId/updated-name')
+    .patch(ComplierVaildation.updateFileNameVaild, compilerController.updateFileName)
+
 module.exports = router;

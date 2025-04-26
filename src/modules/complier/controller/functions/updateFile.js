@@ -1,8 +1,8 @@
 const { Compiler, asyncHandler, ApiError } = require('../complier.dependencies');
 const Version = require('../../../versionsCode/model/version.model');
 const generateIdCommit = require('../../../../util/generateIdCommit');
-const crypto = require('crypto');
-
+const encrypted = require('../../../../util/en-de-text.js/encrypted');
+const Group = require('../../../groups/model/group.model')
 const SECRET = process.env.CODE_SECRET;
 
 const updateCodeFile = asyncHandler(async (req, res, next) => {
@@ -12,6 +12,18 @@ const updateCodeFile = asyncHandler(async (req, res, next) => {
     const file = await Compiler.findById(fileId);
     if (!file) return next(new ApiError('File not found', 404));
 
+    const group = await Group.findById(file.group);
+    if (!group) return next(new ApiError('Group not found', 404));
+
+
+    const isAllowed = group.members.some(memberId => memberId.equals(req.user._id))
+        || group.admin.equals(req.user._id);
+
+    if (!isAllowed) {
+        return next(new ApiError('You must be a member or the admin of the group to edit this file', 403));
+    }
+
+    
     if (code) {
         file.setCode(code, SECRET);
     }
@@ -19,12 +31,7 @@ const updateCodeFile = asyncHandler(async (req, res, next) => {
     await file.save();
 
     let version = await Version.findOne({ file: file._id });
-
-    const encryptedCode = crypto
-        .createHmac('sha256', SECRET)
-        .update(code || '')
-        .digest('hex');
-    
+    const encryptedText = encrypted(code, SECRET);
     if (!version) {
         const generateIdcommit = generateIdCommit();
 
@@ -33,7 +40,7 @@ const updateCodeFile = asyncHandler(async (req, res, next) => {
             versions: [
                 {
                     IdCommit: generateIdcommit,
-                    code,
+                    code: encryptedText,
                     createdAt: new Date(),
                     createdBy: req.user._id,
                 }
@@ -45,7 +52,7 @@ const updateCodeFile = asyncHandler(async (req, res, next) => {
 
     version.versions.push({
         IdCommit: generateIdCommit(),
-        code,
+        code: encryptedText,
         createdAt: new Date(),
         createdBy: req.user._id,
     });
@@ -57,5 +64,4 @@ const updateCodeFile = asyncHandler(async (req, res, next) => {
         message: 'File updated and new version added successfully',
     });
 });
-
 module.exports = updateCodeFile;

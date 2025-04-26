@@ -1,6 +1,7 @@
 const { Compiler, Group, asyncHandler, ApiError } = require('../complier.dependencies');
 const Version = require('../../../versionsCode/model/version.model')
 const generateIdCommit = require('../../../../util/generateIdCommit');
+const validateFileExtensionMatchesLanguage = require('../../../../util/extensionToLanguageId');
 
 /**
  * @desc    Create a new file inside a group
@@ -16,6 +17,12 @@ const createNewFile = asyncHandler(async (req, res, next) => {
 
     const existingFile = await Compiler.findOne({ fileName, group: groupId });
     if (existingFile) return next(new ApiError('File with the same name already exists', 400));
+
+    try {
+        validateFileExtensionMatchesLanguage(fileName, language_id);
+    } catch (err) {
+        return next(new ApiError(err.message, 400));
+    }
 
     const newFile = new Compiler({
         fileName,
