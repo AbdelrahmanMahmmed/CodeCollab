@@ -1,7 +1,7 @@
 const { ApiError, Group, asyncHandler, getIO } = require('../massages.dependencies');
 const { uploadImage } = require('../../../../util/UploadImage');
-const encryptedContented = require('../../../../util/encrypted');
-
+const encrypted = require('../../../../util//en-de-text.js/encrypted');
+const SECRET = process.env.SECRET_KEY;
 /**
  * @desc    Send a message with image to a group
  * @route   POST /api/v1/groups/:groupId/messages/image
@@ -30,7 +30,7 @@ const sendImageMessageToGroup = asyncHandler(async (req, res, next) => {
     imageUrl = result.secure_url;
 
 
-    const encryptedContent = encryptedContented(imageUrl, 'image');
+    const encryptedContent = encrypted(imageUrl , SECRET);
     
     const newMessage = {
         sender: userId,

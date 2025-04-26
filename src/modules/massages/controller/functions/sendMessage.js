@@ -1,5 +1,6 @@
 const {Group,asyncHandler,ApiError,getIO,CryptoJS} = require('../massages.dependencies')
-const encryptedContented = require('../../../../util/encrypted');
+const encrypted = require('../../../../util//en-de-text.js/encrypted');
+const SECRET = process.env.SECRET_KEY;
 /**
  * @desc    Send a message to a group
  * @route   POST /api/v1/group/:groupId/message
@@ -13,10 +14,10 @@ const sendMessage = asyncHandler(async (req, res, next) => {
     const group = await Group.findById(groupId);
     if (!group) return next(new ApiError("Group not found", 404));
 
-    const isMember = group.members.includes(userId);
+    const isMember = group.members.includes(userId) || group.admin.toString() === userId.toString();
     if (!isMember) return next(new ApiError("You are not a member of this group", 403));
 
-    const encryptedContent = encryptedContented(content, type);
+    const encryptedContent = encrypted(content , SECRET);
 
     const newMessage = {
         sender: userId,

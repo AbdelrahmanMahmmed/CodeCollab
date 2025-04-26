@@ -16,6 +16,13 @@ const uploadImageForGroup = asyncHandler(async (req, res, next) => {
         if (!group) {
             return res.status(404).json({ error: 'Group not found' });
         }
+
+        const userId = req.user._id.toString();
+        const isAdmin = group.admin._id.toString() === userId;
+        if (!isAdmin) {
+            return next(new ApiError(`You are not allowed to updated image this group`, 400));
+        }
+
         group.image = imageUrl;
         await group.save();
         res.status(200).json({ message: 'Image updated successfully' });
